@@ -52,6 +52,14 @@ export const deleteNote = async (noteId: number): Promise<Note> => {
       Authorization: `Bearer ${KEY}`,
     },
   });
-  console.log(response.data);
+  return response.data;
+};
+
+export const getSingleNote = async (id: string) => {
+  const response = await axios.delete<Note>(`/notes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${KEY}`,
+    },
+  });
   return response.data;
 };
