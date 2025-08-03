@@ -1,7 +1,7 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import css from "./NoteModal.module.css";
+import css from "./Modal.module.css";
 import { useEffect } from "react";
 
 interface ModalProps {
