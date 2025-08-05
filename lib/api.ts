@@ -46,7 +46,7 @@ export const createNote = async (newNote: CreateNoteProps): Promise<Note> => {
   return response.data;
 };
 
-export const deleteNote = async (noteId: number): Promise<Note> => {
+export const deleteNote = async (noteId: string): Promise<Note> => {
   const response = await axios.delete<Note>(`/notes/${noteId}`, {
     headers: {
       Authorization: `Bearer ${KEY}`,
@@ -56,7 +56,7 @@ export const deleteNote = async (noteId: number): Promise<Note> => {
 };
 
 export const getSingleNote = async (id: string) => {
-  const response = await axios.delete<Note>(`/notes/${id}`, {
+  const response = await axios.get<Note>(`/notes/${id}`, {
     headers: {
       Authorization: `Bearer ${KEY}`,
     },
