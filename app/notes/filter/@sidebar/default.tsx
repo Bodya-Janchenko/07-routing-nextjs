@@ -1,39 +1,27 @@
 import css from "./SidebarNotes.module.css";
 import Link from "next/link";
 
+export const categories = [
+  "All",
+  "Work",
+  "Personal",
+  "Meeting",
+  "Shopping",
+  "Todo",
+];
+
 const SidebarNotes = () => {
   return (
     <ul className={css.menuList}>
-      <li className={css.menuItem}>
-        <Link href="/notes/filter/all" className={css.menuLink}>
-          All notes
-        </Link>
-      </li>
-      <li className={css.menuItem}>
-        <Link href="/notes/filter/work" className={css.menuLink}>
-          Work
-        </Link>
-      </li>
-      <li className={css.menuItem}>
-        <Link href="/notes/filter/personal" className={css.menuLink}>
-          Personal
-        </Link>
-      </li>
-      <li className={css.menuItem}>
-        <Link href="/notes/filter/meeting" className={css.menuLink}>
-          Meeting
-        </Link>
-      </li>
-      <li className={css.menuItem}>
-        <Link href="/notes/filter/shopping" className={css.menuLink}>
-          Shopping
-        </Link>
-      </li>
-      <li className={css.menuItem}>
-        <Link href="/notes/filter/todo" className={css.menuLink}>
-          Todo
-        </Link>
-      </li>
+      {categories.map((category) => (
+        <li key={category} className={css.menuItem}>
+          <Link href={`/notes/filter/${category}`} className={css.menuLink}>
+            {category}
+          </Link>
+        </li>
+      ))}
     </ul>
   );
 };
+
+export default SidebarNotes;

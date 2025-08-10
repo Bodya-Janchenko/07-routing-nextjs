@@ -1,24 +1,21 @@
 import { fetchNotes } from "@/lib/api";
-import NoteList from "@/components/NoteList/NoteList";
-import { FetchNotesResponse } from "@/lib/api";
 import NotesClient from "./Notes.client";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
 };
 
+const formatTag = (tag?: string) => {
+  if (!tag || tag.toLowerCase() === "all") return undefined;
+  return tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase();
+};
+
 const NotesByCategory = async ({ params }: Props) => {
   const { slug } = await params;
-  const category = slug[0] === "all" ? undefined : slug[0];
-  const response = await fetchNotes(category);
+  const category = formatTag(slug?.[0]);
 
-  const initialData: FetchNotesResponse = await fetchNotes("", 1);
-
-  if (response?.notes?.length > 0) {
-    return <NoteList notes={response.notes} />;
-  }
-
-  return <NotesClient initialData={initialData} />;
+  const initialData = await fetchNotes("", 1, category);
+  return <NotesClient initialData={initialData} initialTag={category} />;
 };
 
 export default NotesByCategory;
