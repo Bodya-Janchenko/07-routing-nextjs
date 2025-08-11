@@ -83,7 +83,7 @@ export default function NotesClient({ initialData, initialTag }: Props) {
       {isModalOpen && (
         //onClose={toogleModal}
         <Modal>
-          <NoteForm onClose={toogleModal} />
+          <NoteForm />
         </Modal>
       )}
 

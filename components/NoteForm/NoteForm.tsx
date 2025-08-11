@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { createNote } from "../../lib/api";
 import toast from "react-hot-toast";
 import type { NoteTag } from "../../types/note";
+import { useRouter } from "next/navigation";
 
 const noteSchema = Yup.object().shape({
   title: Yup.string()
@@ -24,10 +25,6 @@ const noteSchema = Yup.object().shape({
     ),
 });
 
-interface NoteFormProps {
-  onClose: () => void;
-}
-
 interface FormValues {
   title: string;
   content: string;
@@ -40,14 +37,17 @@ const initialFormValues: FormValues = {
   tag: "Todo",
 };
 
-export default function NoteForm({ onClose }: NoteFormProps) {
+export default function NoteForm() {
+  const router = useRouter();
+
+  const close = () => router.back();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       toast.success("Note created");
-      onClose();
+      close();
     },
   });
 
@@ -97,7 +97,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
         </div>
 
         <div className={css.actions}>
-          <button type="button" className={css.cancelButton} onClick={onClose}>
+          <button type="button" className={css.cancelButton} onClick={close}>
             Cancel
           </button>
           <button
