@@ -17,7 +17,11 @@ const TagsMenu = () => {
         <ul className={css.menuList}>
           {categories.map((category) => (
             <li key={category} className={css.menuItem}>
-              <Link href={`/notes/filter/${category}`} className={css.menuLink}>
+              <Link
+                href={`/notes/filter/${category}`}
+                className={css.menuLink}
+                onClick={toggle}
+              >
                 {category}
               </Link>
             </li>

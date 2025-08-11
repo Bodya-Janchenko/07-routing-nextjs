@@ -5,7 +5,7 @@ import css from "./Notes.module.css";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
 import NoteList from "@/components/NoteList/NoteList";
-import Modal from "@/components/Modal/Modal";
+import NoteModal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
 
 import { useState } from "react";
@@ -17,33 +17,21 @@ import type { FetchNotesResponse } from "@/lib/api";
 
 type Props = {
   initialData: FetchNotesResponse;
-  initialTag?: string;
 };
 
-export default function NotesClient({ initialData, initialTag }: Props) {
+export default function NotesClient({ initialData }: Props) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [tag] = useState<string | undefined>(initialTag);
 
   const [debounceSearchQuery] = useDebounce(searchQuery, 300);
 
-  // const { data, isLoading, isError, error } = useQuery({
-  //   queryKey: ["notes", debounceSearchQuery, currentPage],
-  //   queryFn: () => fetchNotes(debounceSearchQuery, currentPage),
-  //   placeholderData: keepPreviousData,
-  //   initialData:
-  //     currentPage === 1 && debounceSearchQuery === "" ? initialData : undefined,
-  // });
-
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["notes", debounceSearchQuery, currentPage, tag],
-    queryFn: () => fetchNotes(debounceSearchQuery, currentPage, tag),
+    queryKey: ["notes", debounceSearchQuery, currentPage],
+    queryFn: () => fetchNotes(debounceSearchQuery, currentPage),
     placeholderData: keepPreviousData,
     initialData:
-      currentPage === 1 && debounceSearchQuery === "" && !tag
-        ? initialData
-        : undefined,
+      currentPage === 1 && debounceSearchQuery === "" ? initialData : undefined,
   });
 
   const notes = data?.notes ?? [];
@@ -81,10 +69,9 @@ export default function NotesClient({ initialData, initialTag }: Props) {
       </header>
 
       {isModalOpen && (
-        //onClose={toogleModal}
-        <Modal>
-          <NoteForm />
-        </Modal>
+        <NoteModal onClose={toogleModal}>
+          <NoteForm onClose={toogleModal} />
+        </NoteModal>
       )}
 
       {isLoading && <p>Loading notes...</p>}
