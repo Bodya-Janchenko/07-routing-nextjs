@@ -17,21 +17,35 @@ import type { FetchNotesResponse } from "@/lib/api";
 
 type Props = {
   initialData: FetchNotesResponse;
+  initialTag?: string;
 };
 
-export default function NotesClient({ initialData }: Props) {
+export default function NotesClient({ initialData, initialTag }: Props) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // const [tag, setTag] = useState<string | undefined>(initialTag);
 
   const [debounceSearchQuery] = useDebounce(searchQuery, 300);
 
+  // const { data, isLoading, isError, error } = useQuery({
+  //   queryKey: ["notes", debounceSearchQuery, currentPage],
+  //   queryFn: () => fetchNotes(debounceSearchQuery, currentPage),
+  //   placeholderData: keepPreviousData,
+  //   initialData:
+  //     currentPage === 1 && debounceSearchQuery === "" ? initialData : undefined,
+  // });
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["notes", debounceSearchQuery, currentPage],
-    queryFn: () => fetchNotes(debounceSearchQuery, currentPage),
+    queryKey: ["notes", debounceSearchQuery, currentPage, initialTag],
+    queryFn: () => fetchNotes(debounceSearchQuery, currentPage, initialTag),
     placeholderData: keepPreviousData,
     initialData:
-      currentPage === 1 && debounceSearchQuery === "" ? initialData : undefined,
+      currentPage === 1 &&
+      debounceSearchQuery === "" &&
+      initialTag === undefined
+        ? initialData
+        : undefined,
   });
 
   const notes = data?.notes ?? [];
